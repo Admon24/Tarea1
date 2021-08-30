@@ -53,6 +53,7 @@ public class Servidor {
             public void run() {
                 try {
                     servidor = new ServerSocket(8080); //Este constructor recibe el puerto por el que escucha el serverSocket
+                    System.out.println("Servidor escuchando");
                         while (true){ //Ciclo infinito
                             sc = servidor.accept(); //El servidor acepta las conexiones que le llegan al puerto
                             leer();
@@ -67,6 +68,8 @@ public class Servidor {
     }
 
     public void leer(){
+        int i=0;
+        int[] dato= new int[3];
         Thread leer_hilo = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -75,7 +78,7 @@ public class Servidor {
                         while (true){
                             String msg_recibido = lector.readLine(); //Leo todo lo que envíe el socket sc
                             area_chat.append("Cliente envía: " + msg_recibido + "\n"); //Pintamos el mensaje recibido en la ventana
-
+                            System.out.println(lector.readLine());
                         }
                 } catch (Exception e){
                     e.printStackTrace();
@@ -99,7 +102,7 @@ public class Servidor {
                             txt_msg.setText(""); //SE limpia la caja de texto
                         }
                     });
-                    //escritor.println(); //Envío emnsajes, gracias al true de la línea de arriba
+                    //escritor.println(); //Envío mensajes, gracias al true de la línea de arriba
                 } catch (Exception e){
                     e.printStackTrace();
                 }

@@ -6,6 +6,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.StringTokenizer;
 
 public class Cliente {
     JFrame ventana_chat = null;
@@ -18,6 +19,7 @@ public class Cliente {
     Socket sc1 = null;
     BufferedReader lector = null;
     PrintWriter escritor = null;
+    double op;
 
     public Cliente(){
         hacerInterfaz();
@@ -49,7 +51,8 @@ public class Cliente {
             @Override
             public void run() {
                 try {
-                    sc1 = new Socket("localhost", 8080); //El socket sc va a estar conectado a esta misma máquina en el puerto 8000
+                    sc1 = new Socket("localhost", 8080); //El socket sc va a estar conectado a esta misma máquina en el puerto
+                    System.out.println("Clente 1 conectado");
                     leer1();
                     escribir1();
                 } catch (Exception e){
@@ -69,7 +72,22 @@ public class Cliente {
                     while (true){
                         String msg_recibido = lector.readLine(); //Leo todo lo que envíe el socket sc
                         area_chat.append("Servidor envía: " + msg_recibido + "\n"); //Pintamos el mensaje recibido en la ventana
+                        System.out.println(msg_recibido);
 
+                        int i=0;
+                        int[] dato= new int[3];
+
+                        StringTokenizer Stoken = new StringTokenizer(msg_recibido,"-");//Convierte el string en un arreglo
+                        while (Stoken.hasMoreTokens()){ //ciclo para separar palabras
+
+                            dato[i]= Integer.parseInt(Stoken.nextToken());
+                            System.out.println(dato[i]);
+                            i++;
+                            if (i==3){
+                                op = ((dato[0]*dato[1])/100)+(dato[2]*0.15);
+                                System.out.println(op);
+                            }
+                        }
                     }
                 } catch (Exception e){
                     e.printStackTrace();
@@ -89,8 +107,8 @@ public class Cliente {
                     btn_enviar.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) { //Se ejecuta cada vez que se le da click al botón
-                            String enviar_msg = txt_msg.getText(); //Obtengo el mensaje en la caja de texto
-                            escritor.println(enviar_msg); //Envío el mensaje mediante el método escritor
+                            //String enviar_msg = txt_msg.getText(); //Obtengo el mensaje en la caja de texto
+                            escritor.println(op); //Envío el mensaje mediante el método escritor
                             txt_msg.setText(""); //SE limpia la caja de texto
                         }
                     });

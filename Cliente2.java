@@ -6,6 +6,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.StringTokenizer;
 
 public class Cliente2 {
     JFrame ventana_chat = null;
@@ -18,6 +19,7 @@ public class Cliente2 {
     Socket sc2 = null;
     BufferedReader lector = null;
     PrintWriter escritor = null;
+    double op;
 
     public Cliente2(){
         hacerInterfaz();
@@ -49,7 +51,8 @@ public class Cliente2 {
             @Override
             public void run() {
                 try {
-                    sc2 = new Socket("localhost", 8080); //El socket sc va a estar conectado a esta misma máquina en el puerto 8000
+                    sc2 = new Socket("localhost", 8080); //El socket sc va a estar conectado a esta misma máquina en el puerto
+                    System.out.println("Clente 2 conectado");
                     leer2();
                     escribir2();
                 } catch (Exception e){
@@ -69,7 +72,22 @@ public class Cliente2 {
                     while (true){
                         String msg_recibido = lector.readLine(); //Leo todo lo que envíe el socket sc
                         area_chat.append("Servidor envía: " + msg_recibido + "\n"); //Pintamos el mensaje recibido en la ventana
+                        System.out.println(msg_recibido);
 
+                        int i=0;
+                        int[] dato= new int[3];
+
+                        StringTokenizer Stoken = new StringTokenizer(msg_recibido,"-");//Convierte el string en un arreglo
+                        while (Stoken.hasMoreTokens()){ //ciclo para separar palabras
+
+                            dato[i]= Integer.parseInt(Stoken.nextToken());
+                            System.out.println(dato[i]);
+                            i++;
+                            if (i==3){
+                                op = ((dato[0]*dato[1])/100)+(dato[2]*0.15);
+                                System.out.println(dato[0]+dato[1]+dato[2]);
+                            }
+                        }
                     }
                 } catch (Exception e){
                     e.printStackTrace();
